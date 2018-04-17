@@ -1,0 +1,34 @@
+When running the application, you will see the following prompt
+"Alarm> ", at which point you should enter one of the following
+command types: Type A, Type B, or Type C specified below
+Type A: Time MessageType(Type) AlarmMessage
+Type B: Create_Thread: MessageType(Type)
+Type C: Terminate: MessageType(Type)
+
+Where MessageType, Create_Thread, and Terminate are all reserved
+keywords by the program. Time is an unsigned number denoting the
+amount of time to wait between two consecutive prints of the alarm.
+Type is an unsigned number used to categorize different alarms.
+And finally, AlarmMessage is a non-empty string of maximum length 50.
+Note that longer strings will be truncated to 50 characters. This
+restriction on 50 characters can easily be modified by changing
+#define MAX_MSG_LEN 50 in alarm_def.h
+
+Examples of valid commands:
+    20 MessageType(2) Hello World !
+    Create_Thread: MessageType(3)
+    Terminate: MessageType(5)
+
+
+
+What does each command do?
+
+Type A commands create a new alarm with the given time, type, and
+message to be handled by an alarm thread of the same type.
+
+Type B commands create a new alarm thread with the given type, which
+handles any alarms that are of the same type and have not been assigned
+to any other alarm threads.
+
+Type C commands terminate all alarm threads of the given type and also
+delete all messages of that type from the alarms list.
