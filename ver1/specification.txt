@@ -1,3 +1,5 @@
+Version 1
+
 When running the application, you will see the following prompt
 "Alarm> ", at which point you should enter one of the following
 command types: Type A, Type B, or Type C specified below
