@@ -1,0 +1,37 @@
+1. To compile the program, use the following shell command:
+
+	make
+
+
+2. To execute the program, use the following shell command:
+
+	./alarm_app
+
+
+3. At the prompt "Alarm> ", type one of the following commands:
+
+	Type A: Time MessageType(Type) AlarmMessage
+	Type B: Create_Thread: MessageType(Type)
+	Type C: Terminate: MessageType(Type)
+
+	Where MessageType, Create_Thread, and Terminate are
+	all reserved keywords by the program.
+
+	Time is an unsigned number denoting the amount of time
+	to wait between two consecutive prints of the alarm.
+
+	Type is an unsigned number used to categorize different alarms.
+
+	And finally AlarmMessage is a non-empty string of maximum length
+	50. Note that longer strings will be truncated to 50 characters.
+	This restriction on 50 characters can easily be modified by
+	changing #define MAX_MSG_LEN 50 in alarm_def.h
+
+
+	Examples of valid commands:
+		20 MessageType(2) Hello World !
+		Create_Thread: MessageType(3)
+		Terminate: MessageType(5)
+
+
+4. To exit the program, enter Ctrl+D which signals End Of File(EOF).
