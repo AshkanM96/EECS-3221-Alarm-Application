@@ -1,0 +1,47 @@
+When running the application, you will see the following prompt
+"Alarm> ", at which point you should enter one of the following
+command types: Type A, Type B, or Type C specified below
+Type A: Time Message(Type, Number) AlarmMessage
+Type B: Create_Thread: MessageType(Type)
+Type C: Cancel: Message(Number)
+
+Where Message, Create_Thread, MessageType, and Terminate are all
+reserved keywords by the program. Time is an unsigned number denoting
+the amount of time to wait between two consecutive prints of the alarm.
+Type is an unsigned number used to categorize different alarms.
+And finally AlarmMessage is a non-empty string of maximum length 50.
+Note that longer strings will be truncated to 50 characters. This
+restriction on 50 characters can easily be modified by changing
+#define MAX_MSG_LEN 50 in alarm_def.h
+
+Examples of parse-valid commands:
+	20 Message(2, 3) Hello World !
+	Create_Thread: MessageType(5)
+	Cancel: Message(7)
+
+
+
+What does each command do?
+
+Type A commands create a new alarm with the given time, type, number,
+and message to be handled by an alarm thread of the same type. However,
+number is meant to be a unique alarm identifier which is why if an alarm
+with the same number exists, then the new alarm will replace it.
+
+Type B commands create a new alarm thread with the given type, which
+handles any alarms that are of the same type and have not been assigned
+to any other alarm threads. However, we also impose the extra restriction
+that threads of a given type must be unique on top of the following
+restriction: No alarm thread can be idle. This means that an alarm thread
+of a given type is not created if there are no alarms of that type. Furthermore,
+it also means that when an alarm that is assigned to an alarm thread is replaced
+as a result of an appropriate Type A command or cancelled as a result of an
+appropriate Type C command then the thread handling it may also self terminate.
+It will actually do so when it becomes idle(i.e., not handling any more alarms).
+
+Type C commands cancel a single alarm with the given number which must exist
+otherwise the command is invalid.
+
+
+
+For even more information, refer to the Report.pdf file.
