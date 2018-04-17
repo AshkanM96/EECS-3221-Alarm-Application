@@ -1,5 +1,14 @@
-The two files linked_list_embed_design.pdf and linked_list_malloc_design.pdf show a situation with some alarms in the global alarms list and some alarm handler threads handling subsets of the alarms list. They each however, demonstrate how the application could accomplish this in a different way.
+The two files linked_list_embed_design.pdf and linked_list_malloc_design.pdf show a
+situation with some alarms in the global alarms list and some alarm handler threads
+handling subsets of the alarms list. They each however, demonstrate how the application
+could accomplish this in a different way.
 
-One way (malloc design) could be to allocate a new linked list for each alarm handler thread which would be much slower but also very wasteful with memory as demonstrated by linked_list_malloc_design.pdf which shows that each alarm has is being represented in memory twice thus dividing the amount of effective memory by 2.
+One way (malloc design) could be to allocate a new linked list for each alarm handler
+thread which would be much slower but also very wasteful with memory as demonstrated
+by linked_list_malloc_design.pdf which shows that each alarm has is being represented
+in memory twice thus dividing the amount of effective memory by 2.
 
-The better way (embed design) shows how the global alarms list can be augmented to be able to save the local lists within it (embed them). All that is needed is to just add an extra pointer (link_handle) to each of the nodes which the alarm handler threads will maintain and use to navigate through their own lists.
+The better way (embed design) shows how the global alarms list can be augmented to be
+able to save the local lists within it (embed them). All that is needed is to just add
+an extra pointer (link_handle) to each of the nodes which the alarm handler threads will
+maintain and use to navigate through their own lists.
