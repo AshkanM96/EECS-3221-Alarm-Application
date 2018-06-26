@@ -161,6 +161,10 @@
 	#define COND_VAR_SIGNAL_ERR 14
 	#define COND_VAR_SIGNAL_ERR_MSG "Conditional variable signal error"
 
+	/* Stream error. */
+	#define STREAM_ERR 15
+	#define STREAM_ERR_MSG "Stream error"
+
 
 
 	/* Type Definitions */

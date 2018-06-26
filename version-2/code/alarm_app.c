@@ -184,7 +184,13 @@ int main(void) {
 	#ifdef APP_LOG_FILE
 		printf("Do you want to save the application log to a file named %s? (y/n) ", APP_LOG_FILE);
 		status = read_line(fgetc, stdin, &len, &line); data.line = line;
-		if (status == -1) {
+		if (status == -2) {
+			/* Cleanup main thread and terminate. */
+			data.mode = APP_LOG_FILE_LOCATION_FAIL;
+			data.err.linenum = __LINE__;
+			data.err.val = STREAM_ERR; data.err.msg = STREAM_ERR_MSG;
+			pthread_exit(&data);
+		} else if (status == -1) {
 			/* Cleanup main thread and terminate. */
 			data.mode = APP_LOG_FILE_LOCATION_FAIL;
 			data.err.linenum = __LINE__;
@@ -346,7 +352,12 @@ int main(void) {
 
 		/* Read the next line of input from stdin. */
 		status = read_line(fgetc, stdin, &len, &line); data.line = line;
-		if (status == -1) {
+		if (status == -2) {
+			/* Cleanup main thread and terminate. */
+			data.err.linenum = __LINE__;
+			data.err.val = STREAM_ERR; data.err.msg = STREAM_ERR_MSG;
+			pthread_exit(&data);
+		} else if (status == -1) {
 			/* Cleanup main thread and terminate. */
 			data.err.linenum = __LINE__;
 			data.err.val = ALLOC_STR_ERR; data.err.msg = ALLOC_STR_ERR_MSG;
