@@ -586,7 +586,7 @@ void * realloc_safe(void *ptr, size_t size) {
  * if there is a memory allocation error, the function
  * will free all allocated memory. It also means that
  * when there isn't an error, *line_ptr can be freed
- * safely by call to void free(void *ptr).
+ * safely by a call to void free(void *ptr).
  *
  * Preconditions:
  * 		1. stream is valid as required by int fgetc(FILE *stream)
@@ -594,10 +594,11 @@ void * realloc_safe(void *ptr, size_t size) {
  * 		3. *len_ptr == 0
  *
  * Returns:
- * 		1. -1	if there is a memory allocation error
- * 		2.  0	on success
- * 		3.  1	if EOF is reached
- * 		4.  2	if enough capacity cannot be allocated for *line_ptr
+ * 		1. -2	if there is a stream error
+ * 		2. -1	if there is a memory allocation error
+ * 		3.  0	on success
+ * 		4.  1	if EOF is reached
+ * 		5.  2	if enough capacity cannot be allocated for *line_ptr
  */
 int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **line_ptr) {
 	/* c stores the next read char from the given stream. */
@@ -616,7 +617,7 @@ int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **li
 	/* Infinite loop reading the next char from the given stream. */
 	while (true) {
 		c = (*read_char)(stream);
-		if (c == EOF) {
+		if (feof(stream) != 0) {
 			/*
 			 * EOF has been reached so null terminate
 			 * the line but then return 1 only if no
@@ -624,6 +625,13 @@ int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **li
 			 */
 			(*line_ptr)[*len_ptr] = '\0';
 			return (*len_ptr == 0 ? 1 : 0);
+		} else if ((ferror(stream) != 0) || (c == EOF)) {
+			/*
+			 * EOF is returned by a char reading
+			 * function on EOF itself or on error
+			 * hence check (c == EOF).
+			 */
+			return -2;
 		} else if (c == '\n') {
 			/*
 			 * A full line has been read so

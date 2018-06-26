@@ -376,7 +376,7 @@
 	 * if there is a memory allocation error, the function
 	 * will free all allocated memory. It also means that
 	 * when there isn't an error, *line_ptr can be freed
-	 * safely by call to void free(void *ptr).
+	 * safely by a call to void free(void *ptr).
 	 *
 	 * Preconditions:
 	 * 		1. stream is valid as required by int fgetc(FILE *stream)
@@ -384,10 +384,11 @@
 	 * 		3. *len_ptr == 0
 	 *
 	 * Returns:
-	 * 		1. -1	if there is a memory allocation error
-	 * 		2.  0	on success
-	 * 		3.  1	if EOF is reached
-	 * 		4.  2	if enough capacity cannot be allocated for *line_ptr
+	 * 		1. -2	if there is a stream error
+	 * 		2. -1	if there is a memory allocation error
+	 * 		3.  0	on success
+	 * 		4.  1	if EOF is reached
+	 * 		5.  2	if enough capacity cannot be allocated for *line_ptr
 	 */
 	int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **line_ptr);
 
