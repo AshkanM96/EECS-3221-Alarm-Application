@@ -10,7 +10,7 @@
  *
  * Standard Headers, Type Definitions, Generic Macros,
  * and useful Function Prototypes for numbers, memory
- * allocation, input/output(IO), and much more.
+ * allocation, input/output(IO), time, and much more.
  */
 
 #ifndef INCLUDE_GUARD_STD__UTILITIES___H
@@ -30,6 +30,7 @@
 	#include <stdio.h>
 	#include <string.h>
 	#include <ctype.h>
+	#include <time.h>
 
 
 
@@ -391,6 +392,16 @@
 	 * 		5.  2	if enough capacity cannot be allocated for *line_ptr
 	 */
 	int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **line_ptr);
+
+
+
+	/* Time Functions */
+
+	/*
+	 * Returns: Current time by invoking time(NULL)
+	 * and casting the result into uint_fast64_t.
+	 */
+	uint_fast64_t now(void);
 
 
 

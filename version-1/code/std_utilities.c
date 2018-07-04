@@ -678,6 +678,18 @@ int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **li
 
 
 
+/* Time Functions */
+
+/*
+ * Returns: Current time by invoking time(NULL)
+ * and casting the result into uint_fast64_t.
+ */
+uint_fast64_t now(void) {
+	return ((uint_fast64_t) time(NULL));
+}
+
+
+
 /* Error Functions */
 
 /*

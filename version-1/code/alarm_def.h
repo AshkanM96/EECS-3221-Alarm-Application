@@ -10,7 +10,7 @@
  *
  * Headers, Macros, Type Definitions, and
  * Function Prototypes for a multi-threaded
- * alarm application
+ * alarm application.
  */
 
 #ifndef INCLUDE_GUARD_ALARM__DEF___H
@@ -21,7 +21,6 @@
 	/* Headers */
 
 	#include <pthread.h>
-	#include <time.h>
 	#include "std_utilities.h"
 
 
@@ -343,16 +342,6 @@
 				Alarm * (*after)(const Alarm *),
 				void (*insert_first)(Alarm **, Alarm *),
 				void (*insert_after)(Alarm *, Alarm *));
-
-
-
-	/* Time Functions */
-
-	/*
-	 * Returns: Current time by invoking time(NULL)
-	 * and casting the result into uint_fast64_t.
-	 */
-	uint_fast64_t now(void);
 
 
 
