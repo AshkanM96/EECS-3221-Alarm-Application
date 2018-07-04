@@ -489,18 +489,6 @@ pthread_t * insert_alarm(Alarm **head_ptr, Alarm *new_alarm,
 
 
 
-/* Time Functions */
-
-/*
- * Returns: Current time by invoking time(NULL)
- * and casting the result into uint_fast64_t.
- */
-uint_fast64_t now(void) {
-	return ((uint_fast64_t) time(NULL));
-}
-
-
-
 /* Thread Functions */
 
 /*
