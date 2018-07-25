@@ -1,4 +1,5 @@
-/*
+/**************************************************************************
+ *
  * Author:
  * 					Ashkan Moatamed
  *
@@ -43,7 +44,8 @@
  * alarms of the given type if no such thread already exists.
  *
  * Type C commands, terminate a single message with the given number.
- */
+ *
+ *************************************************************************/
 
 /* Define variables and function prototypes specified in alarm_app.h */
 #define DEFINE_VARIABLES_AND_FUNCTIONS

@@ -1,4 +1,5 @@
-/*
+/**************************************************************************
+ *
  * Author:
  * 					Ashkan Moatamed
  *
@@ -10,7 +11,8 @@
  *
  * Implementation of the Functions
  * defined in std_utilities.h
- */
+ *
+ *************************************************************************/
 
 #include "std_utilities.h"
 
@@ -558,16 +560,21 @@ uint_fast64_t str_to_uf64(const char *s) {
 /* Memory Allocation Functions */
 
 /*
- * realloc_safe, reallocates memory for an array pointed to
- * by ptr with no memory leak by freeing previously allocated
- * memory in case of failure.
+ * Reallocate the memory pointed to by ptr and update ptr
+ * accordingly, to point to the new location. If the reallocation
+ * fails, the original memory will be freed by a call to free(ptr).
+ * Furthermore, on reallocation failure, ptr will be set to NULL.
  *
- * Preconditions: Same as void * realloc(void *ptr, size_t size)
+ * Preconditions:
+ * 		1. Being able to safely call realloc(ptr, size)
+ * 		2. Being able to safely call free(ptr) on reallocation failure
+ *
+ * Returns: The new value of ptr.
  */
 void * realloc_safe(void *ptr, size_t size) {
-	void *tmp = realloc(ptr, size);
-	if (tmp == NULL) { free(ptr); }
-	return (ptr = tmp);
+	void *new_ptr = realloc(ptr, size);
+	if (new_ptr == NULL) { free(ptr); }
+	return (ptr = new_ptr);
 }
 
 
@@ -664,7 +671,7 @@ int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **li
 				}
 
 				/* Reallocate memory. */
-				*line_ptr = REALLOC_ARRAY(char, *line_ptr, capacity);
+				REALLOC_ARRAY(char, *line_ptr, capacity);
 				if (*line_ptr == NULL) { return -1; }
 			}
 		}

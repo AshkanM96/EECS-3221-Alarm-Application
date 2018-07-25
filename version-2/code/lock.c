@@ -1,4 +1,5 @@
-/*
+/**************************************************************************
+ *
  * Author:
  * 					Ashkan Moatamed
  *
@@ -11,7 +12,8 @@
  * Implementation of the Lock Obtaining
  * and Releasing Functions defined in
  * alarm_app.h
- */
+ *
+ *************************************************************************/
 
 /* Declare variables and function prototypes specified in alarm_app.h */
 #include "alarm_app.h"
