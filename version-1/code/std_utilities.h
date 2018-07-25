@@ -1,4 +1,5 @@
-/*
+/**************************************************************************
+ *
  * Author:
  * 					Ashkan Moatamed
  *
@@ -11,7 +12,8 @@
  * Standard Headers, Type Definitions, Generic Macros,
  * and useful Function Prototypes for numbers, memory
  * allocation, input/output(IO), time, and much more.
- */
+ *
+ *************************************************************************/
 
 #ifndef INCLUDE_GUARD_STD__UTILITIES___H
 	#define INCLUDE_GUARD_STD__UTILITIES___H
@@ -344,11 +346,16 @@
 		((type *) malloc(sizeof(type) * ((size_t) (size))))
 
 	/*
-	 * realloc_safe, reallocates memory for an array pointed to
-	 * by ptr with no memory leak by freeing previously allocated
-	 * memory in case of failure.
+	 * Reallocate the memory pointed to by ptr and update ptr
+	 * accordingly, to point to the new location. If the reallocation
+	 * fails, the original memory will be freed by a call to free(ptr).
+	 * Furthermore, on reallocation failure, ptr will be set to NULL.
 	 *
-	 * Preconditions: Same as void * realloc(void *ptr, size_t size)
+	 * Preconditions:
+	 * 		1. Being able to safely call realloc(ptr, size)
+	 * 		2. Being able to safely call free(ptr) on reallocation failure
+	 *
+	 * Returns: The new value of ptr.
 	 */
 	void * realloc_safe(void *ptr, size_t size);
 

@@ -1,4 +1,5 @@
-/*
+/**************************************************************************
+ *
  * Author:
  * 					Ashkan Moatamed
  *
@@ -40,7 +41,8 @@
  *
  * Type C commands, terminate all threads and remove all messages
  * of the given type.
- */
+ *
+ *************************************************************************/
 
 /* Define variables and function prototypes specified in alarm_app.h */
 #define DEFINE_VARIABLES_AND_FUNCTIONS

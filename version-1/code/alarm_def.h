@@ -1,4 +1,5 @@
-/*
+/**************************************************************************
+ *
  * Author:
  * 					Ashkan Moatamed
  *
@@ -11,7 +12,8 @@
  * Headers, Macros, Type Definitions, and
  * Function Prototypes for a multi-threaded
  * alarm application.
- */
+ *
+ *************************************************************************/
 
 #ifndef INCLUDE_GUARD_ALARM__DEF___H
 	#define INCLUDE_GUARD_ALARM__DEF___H

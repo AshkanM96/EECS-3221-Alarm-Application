@@ -1,4 +1,5 @@
-/*
+/**************************************************************************
+ *
  * Author:
  * 					Ashkan Moatamed
  *
@@ -11,7 +12,8 @@
  * Headers, Macros, Type Definitions, Variable
  * Definitions, and useful Function Prototypes
  * for alarm_app.c
- */
+ *
+ *************************************************************************/
 
 #ifndef INCLUDE_GUARD_ALARM__APP___H
 	#define INCLUDE_GUARD_ALARM__APP___H
