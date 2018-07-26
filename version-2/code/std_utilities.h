@@ -359,10 +359,7 @@
 	 */
 	void * realloc_safe(void *ptr, size_t size);
 
-	/*
-	 * Generic Macro used to reallocate memory for an array of
-	 * objects using the realloc_safe user-defined method.
-	 */
+	/* Generic Macro used to reallocate memory for an array of objects. */
 	#define REALLOC_ARRAY(type, ptr, size) \
 		((type *) realloc_safe((ptr), sizeof(type) * ((size_t) (size))))
 
