@@ -1,5 +1,5 @@
 ## EECS-3221
-This is just a repository of a multithreaded alarm application written in *C* that uses the *pthreads* library to handle the multithreading aspects of the application.
+This is just a repository of a multithreaded alarm application written in *ANSI C* that uses the *pthreads* library to handle the multithreading aspects of the application.
 
 
 
