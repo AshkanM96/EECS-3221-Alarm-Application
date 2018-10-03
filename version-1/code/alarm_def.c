@@ -258,7 +258,6 @@ void insert_alarm(Alarm **head_ptr, Alarm *new_alarm,
 
 
 	/* General Case: */
-
 	for (curr_alarm = *head_ptr; (next_alarm = (*after)(curr_alarm)) != NULL; /* Update inside. */) {
 		if (is_less_alarm(new_alarm, next_alarm)) {
 			/* (*new_alarm < *next_alarm) */

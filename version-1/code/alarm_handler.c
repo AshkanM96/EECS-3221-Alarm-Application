@@ -179,7 +179,7 @@ void * alarm_handler(void *arg) {
 			/* (handle_list_head != NULL) implies that the list is NOT empty. */
 			for (time_since_update = 0; time_since_update != ALARM_THREAD_UPDATE_PERIOD; /* Update inside. */) {
 				sleep(1); /* Sleep for 1 second. */
-				time_since_create++; time_since_update++;
+				++time_since_create; ++time_since_update;
 
 				/* Loop over all assigned alarms and print the appropriate ones. */
 				for (curr_alarm = handle_list_head; curr_alarm != NULL; curr_alarm = curr_alarm->link_handle) {

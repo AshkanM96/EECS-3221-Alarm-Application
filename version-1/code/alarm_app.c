@@ -68,7 +68,7 @@ int main(void) {
 
 	/* Temporary variables used to parse commands. */
 	char *tmp_str = NULL;
-	size_t i = 0, msg_start = 0, msg_end = 0;
+	size_t i = 0, msg_start = 0, msg_end = 0, msg_max_end = 0;
 
 
 
@@ -162,7 +162,7 @@ int main(void) {
 	app_log = stdout; /* Initialize app_log. */
 	#ifdef APP_LOG_FILE
 		printf("Do you want to save the application log to a file named %s? (y/n) ", APP_LOG_FILE);
-		status = read_line(fgetc, stdin, &len, &line); data.line = line;
+		status = read_line(fgetc, stdin, &len, &line, NULL); data.line = line;
 		if (status == -2) {
 			/* Cleanup main thread and terminate. */
 			data.err.linenum = __LINE__;
@@ -261,7 +261,7 @@ int main(void) {
 		printf("Alarm> ");
 
 		/* Read the next line of input from stdin. */
-		status = read_line(fgetc, stdin, &len, &line); data.line = line;
+		status = read_line(fgetc, stdin, &len, &line, NULL); data.line = line;
 		if (status == -2) {
 			/* Cleanup main thread and terminate. */
 			data.err.linenum = __LINE__;
@@ -355,10 +355,11 @@ int main(void) {
 			 * Truncation is done by taking the minimum of the two possible
 			 * lengths for msg and ignoring the rest of the chars in line.
 			 */
-			msg_end = MIN(msg_start + MAX_MSG_LEN, len);
+			msg_max_end = msg_start + MAX_MSG_LEN;
+			msg_end = MIN(msg_max_end, len);
 
 			/* Copy the alarm message from line into msg. */
-			for (i = msg_start; i < msg_end; i++) {
+			for (i = msg_start; i != msg_end; ++i) {
 				msg[i - msg_start] = line[i];
 			}
 			msg[msg_end - msg_start] = '\0'; /* Null terminate msg. */
@@ -377,7 +378,7 @@ int main(void) {
 			 * msg_start == strlen(tmp_str) many chars.
 			 */
 			status = 1; /* Assume its validity. */
-			for (i = 0; i < msg_start; i++) {
+			for (i = 0; i != msg_start; ++i) {
 				if (line[i] != tmp_str[i]) {
 					status = 0; /* Not valid. */
 					break;
