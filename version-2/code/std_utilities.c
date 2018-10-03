@@ -489,7 +489,7 @@ uint_fast64_t str_to_uf64(const char *s) {
 	 * Loop through the string and check
 	 * that all of its characters are digits.
 	 */
-	for (l = 0; s[l] != '\0'; l++) {
+	for (l = 0; s[l] != '\0'; ++l) {
 		if (isdigit(s[l]) == 0) {
 			/* s[l] is not valid a digit(i.e., 0 through 9). */
 			errno = -1;
@@ -527,7 +527,7 @@ uint_fast64_t str_to_uf64(const char *s) {
 	/* Attempt to parse the string as a uint_fast64_t number. */
 	first_digit = true; /* Parsing first digit so set flag to true. */
 	old_result = result = 0;
-	for (i = 0; i <= l; i++) {
+	for (i = 0; i <= l; ++i) {
 		result += (unsigned) ctoi(s[l - i]); /* s[l - i] is guaranteed to be valid. */
 		result *= 10;
 		/*
@@ -557,28 +557,6 @@ uint_fast64_t str_to_uf64(const char *s) {
 
 
 
-/* Memory Allocation Functions */
-
-/*
- * Reallocate the memory pointed to by ptr and update ptr
- * accordingly, to point to the new location. If the reallocation
- * fails, the original memory will be freed by a call to free(ptr).
- * Furthermore, on reallocation failure, ptr will be set to NULL.
- *
- * Preconditions:
- * 		1. Being able to safely call realloc(ptr, size)
- * 		2. Being able to safely call free(ptr) on reallocation failure
- *
- * Returns: The new value of ptr.
- */
-void * realloc_safe(void *ptr, size_t size) {
-	void *new_ptr = realloc(ptr, size);
-	if (new_ptr == NULL) { free(ptr); }
-	return (ptr = new_ptr);
-}
-
-
-
 /* IO Functions */
 
 /*
@@ -588,6 +566,9 @@ void * realloc_safe(void *ptr, size_t size) {
  *
  * The function will save the read line of input
  * in *line_ptr and store its length in *len_ptr.
+ * If capacity_ptr != NULL, then the line capacity
+ * will be saved in *capacity_ptr and otherwise, the
+ * capacity will remain unknown to the caller!
  *
  * Memory is managed in a leak free way meaning that
  * if there is a memory allocation error, the function
@@ -596,30 +577,35 @@ void * realloc_safe(void *ptr, size_t size) {
  * safely by a call to void free(void *ptr).
  *
  * Preconditions:
- * 		1. stream is valid as required by int fgetc(FILE *stream)
- * 		2. *line_ptr == NULL
- * 		3. *len_ptr == 0
+ * 		1. read_char is a pointer to a single character reading function
+ * 		2. stream is valid as required by int (*read_char)(FILE *stream)
+ * 		3. len_ptr != NULL
+ * 		4. line_ptr != NULL
  *
  * Returns:
  * 		1. -2	if there is a stream error
  * 		2. -1	if there is a memory allocation error
  * 		3.  0	on success
  * 		4.  1	if EOF is reached
- * 		5.  2	if enough capacity cannot be allocated for *line_ptr
+ * 		5.  2	if the required capacity cannot be represented in a size_t variable
  */
-int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **line_ptr) {
-	/* c stores the next read char from the given stream. */
+int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **line_ptr, size_t *capacity_ptr) {
+	/* Stores the next read char from the given stream. */
 	int c = '\0';
 
-	/* The capacity of the line stored in *line_ptr. */
+	/* The capacity of the line pointed to by line_ptr. */
 	size_t capacity = INITIAL_LINE_CAPACITY;
+	/* Saves the line when reallocating so that it can be freed on failure. */
+	char *old_line = NULL;
 
 
 
 	/* Initialize *len_ptr and *line_ptr. */
 	*len_ptr = 0;
-	*line_ptr = MALLOC_ARRAY(char, capacity);
-	if (*line_ptr == NULL) { return -1; }
+	if ((*line_ptr = MALLOC_ARRAY(char, capacity)) == NULL) {
+		if (capacity_ptr != NULL) { *capacity_ptr = 0; }
+		return -1;
+	}
 
 	/* Infinite loop reading the next char from the given stream. */
 	while (true) {
@@ -631,13 +617,16 @@ int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **li
 			 * chars have been read.
 			 */
 			(*line_ptr)[*len_ptr] = '\0';
-			return (*len_ptr == 0 ? 1 : 0);
+			if (capacity_ptr != NULL) { *capacity_ptr = capacity; }
+			return ((*len_ptr == 0) ? 1 : 0);
 		} else if ((ferror(stream) != 0) || (c == EOF)) {
 			/*
 			 * EOF is returned by a char reading
 			 * function on EOF itself or on error
 			 * hence check (c == EOF).
 			 */
+			(*line_ptr)[*len_ptr] = '\0';
+			if (capacity_ptr != NULL) { *capacity_ptr = capacity; }
 			return -2;
 		} else if (c == '\n') {
 			/*
@@ -646,6 +635,7 @@ int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **li
 			 * out of the while loop.
 			 */
 			(*line_ptr)[*len_ptr] = '\0';
+			if (capacity_ptr != NULL) { *capacity_ptr = capacity; }
 			return 0;
 		} else {
 			/* Store the read char stored in c, in the line. */
@@ -667,12 +657,18 @@ int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **li
 				 * resulting type."
 				 */
 				if (capacity <= *len_ptr) {
+					if (capacity_ptr != NULL) { *capacity_ptr = capacity; }
 					return 2;
 				}
 
-				/* Reallocate memory. */
-				REALLOC_ARRAY(char, *line_ptr, capacity);
-				if (*line_ptr == NULL) { return -1; }
+				/* Reallocate memory for *line_ptr. */
+				old_line = *line_ptr;
+				if (REALLOC_ASSIGN_ARRAY(char, *line_ptr, capacity) == NULL) {
+					/* Reallocation failed. */
+					free(old_line);
+					if (capacity_ptr != NULL) { *capacity_ptr = 0; }
+					return -1;
+				}
 			}
 		}
 	}

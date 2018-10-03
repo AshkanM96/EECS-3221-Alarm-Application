@@ -345,23 +345,17 @@
 	#define MALLOC_ARRAY(type, size) \
 		((type *) malloc(sizeof(type) * ((size_t) (size))))
 
-	/*
-	 * Reallocate the memory pointed to by ptr and update ptr
-	 * accordingly, to point to the new location. If the reallocation
-	 * fails, the original memory will be freed by a call to free(ptr).
-	 * Furthermore, on reallocation failure, ptr will be set to NULL.
-	 *
-	 * Preconditions:
-	 * 		1. Being able to safely call realloc(ptr, size)
-	 * 		2. Being able to safely call free(ptr) on reallocation failure
-	 *
-	 * Returns: The new value of ptr.
-	 */
-	void * realloc_safe(void *ptr, size_t size);
-
 	/* Generic Macro used to reallocate memory for an array of objects. */
 	#define REALLOC_ARRAY(type, ptr, size) \
-		((type *) realloc_safe((ptr), sizeof(type) * ((size_t) (size))))
+		((type *) realloc((ptr), sizeof(type) * ((size_t) (size))))
+
+	/*
+	 * Generic Macro used to reallocate memory for an array of objects
+	 * using REALLOC_ARRAY and then assigning the return value to the
+	 * original pointer.
+	 */
+	#define REALLOC_ASSIGN_ARRAY(type, ptr, size) \
+		((ptr) = REALLOC_ARRAY(type, ptr, size))
 
 
 
@@ -376,6 +370,9 @@
 	 *
 	 * The function will save the read line of input
 	 * in *line_ptr and store its length in *len_ptr.
+	 * If capacity_ptr != NULL, then the line capacity
+	 * will be saved in *capacity_ptr and otherwise, the
+	 * capacity will remain unknown to the caller!
 	 *
 	 * Memory is managed in a leak free way meaning that
 	 * if there is a memory allocation error, the function
@@ -384,18 +381,19 @@
 	 * safely by a call to void free(void *ptr).
 	 *
 	 * Preconditions:
-	 * 		1. stream is valid as required by int fgetc(FILE *stream)
-	 * 		2. *line_ptr == NULL
-	 * 		3. *len_ptr == 0
+	 * 		1. read_char is a pointer to a single character reading function
+	 * 		2. stream is valid as required by int (*read_char)(FILE *stream)
+	 * 		3. len_ptr != NULL
+	 * 		4. line_ptr != NULL
 	 *
 	 * Returns:
 	 * 		1. -2	if there is a stream error
 	 * 		2. -1	if there is a memory allocation error
 	 * 		3.  0	on success
 	 * 		4.  1	if EOF is reached
-	 * 		5.  2	if enough capacity cannot be allocated for *line_ptr
+	 * 		5.  2	if the required capacity cannot be represented in a size_t variable
 	 */
-	int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **line_ptr);
+	int read_line(int (*read_char)(FILE *), FILE *stream, size_t *len_ptr, char **line_ptr, size_t *capacity_ptr);
 
 
 

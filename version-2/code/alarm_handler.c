@@ -210,7 +210,7 @@ void * alarm_handler(void *arg) {
 	 */
 	while (true) {
 		sleep(1); /* Sleep for 1 second. */
-		time_since_create++;
+		++time_since_create;
 
 		/* Loop over all assigned alarms and print the appropriate ones. */
 		prev_alarm = NULL;

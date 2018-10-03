@@ -436,7 +436,6 @@ pthread_t * insert_alarm(Alarm **head_ptr, Alarm *new_alarm,
 
 
 	/* General Case: */
-
 	for (curr_alarm = *head_ptr; (next_alarm = (*after)(curr_alarm)) != NULL; /* Update inside. */) {
 		if (global_list && is_equal_alarm(new_alarm, next_alarm)) {
 			/* (*new_alarm == *next_alarm) */
