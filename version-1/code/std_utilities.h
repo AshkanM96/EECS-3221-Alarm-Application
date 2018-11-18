@@ -74,10 +74,10 @@
 	uint_fast64_t lcm(uint_fast64_t x, uint_fast64_t y);
 
 	/* Generic Macro used to find the gcd of two numbers. */
-	#define GCD(x, y) gcd((uint_fast64_t) x, (uint_fast64_t) y)
+	#define GCD(x, y) gcd((uint_fast64_t) (x), (uint_fast64_t) (y))
 
 	/* Generic Macro used to find the lcm of two numbers. */
-	#define LCM(x, y) lcm((uint_fast64_t) x, (uint_fast64_t) y)
+	#define LCM(x, y) lcm((uint_fast64_t) (x), (uint_fast64_t) (y))
 
 	/*
 	 * Parse the given number of type int_fast64_t as
