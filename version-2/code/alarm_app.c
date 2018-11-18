@@ -55,8 +55,8 @@
 
 /*
  * The main thread ignores all command-line arguments
- * hence its signature is: int main(void) instead of:
- * int main(const int argc, const char *argv[])
+ * hence its signature is int main(void) instead of:
+ * int main(int argc, const char *argv[])
  */
 int main(void) {
 	/* Save the current thread(main thread)'s ID. */

@@ -21,45 +21,7 @@
 /* Returns: Greatest common divisor of x and y. */
 uint_fast64_t gcd(uint_fast64_t x, uint_fast64_t y) {
 	uint_fast64_t min = 0, max = 0;
-	uint_fast64_t rem = 0; /* Stores (max mod min). */
-
-
-
-	if (x == y) {
-		/*
-		 * gcd(x, x) == x or gcd(y, y) == y
-		 *
-		 * Note that we have implicitly
-		 * defined gcd(0, 0) == 0 here.
-		 */
-		return y;
-	} else if ((x == 1) || (y == 1)) {
-		/*
-		 * We know that exactly one of
-		 * x and y is 1 therefore we have:
-		 *
-		 * gcd(1, y) == 1 and gcd(x, 1) == 1
-		 *
-		 * Note that even if both were 1,
-		 * the result would still be 1 as
-		 * returned by the first case.
-		 */
-		return 1;
-	} else if (x == 0) {
-		/*
-		 * We know that x != y and x == 0 therefore:
-		 *
-		 * gcd(0, y) == y
-		 */
-		return y;
-	} else if (y == 0) {
-		/*
-		 * We know that x != y and y == 0 therefore:
-		 *
-		 * gcd(x, 0) == x
-		 */
-		return x;
-	}
+	uint_fast64_t rem = 0;
 
 
 
@@ -70,9 +32,9 @@ uint_fast64_t gcd(uint_fast64_t x, uint_fast64_t y) {
 		min = y; max = x;
 	}
 
-	/* Euclid's algorithm: */
+	/* Euclid's algorithm. */
 	while (min != 0) {
-		/* Find remainder upon integer division. */
+		/* Find the remainder upon integer division. */
 		rem = max % min;
 
 		/*
