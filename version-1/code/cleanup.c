@@ -46,11 +46,7 @@ void cleanup_main(void *arg) {
 
 	/* Print any potential errors and then reset data.err. */
 	print_error(data.err);
-	data.err.filename = __FILE__; data.err.linenum = 0;
-	data.err.val = 0; data.err.msg = "";
-
-
-
+	data.err.filename = __FILE__;
 	/* Free memory allocated to data.line. */
 	free(data.line);
 
